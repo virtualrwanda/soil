@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - Agricultural Price Prediction{% endblock %}
+
+{% block content %}
+<!-- Enhanced signup page with better visual design -->
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <div class="max-w-md w-full space-y-8 animate-fade-in">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+            <p class="text-gray-600">Join our agricultural community</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+            <form method="POST" class="space-y-6">
+                {{ form.hidden_tag() }}
+                
+                <div class="space-y-2">
+                    {{ form.username.label(class="block text-sm font-semibold text-gray-700 mb-2") }}
+                    {{ form.username(class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-gray-50 focus:bg-white", placeholder="Choose a username") }}
+                    {% if form.username.errors %}
+                        <div class="mt-2 text-sm text-red-600 animate-fade-in">
+                            {% for error in form.username.errors %}
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="space-y-2">
+                    {{ form.email.label(class="block text-sm font-semibold text-gray-700 mb-2") }}
+                    {{ form.email(class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-gray-50 focus:bg-white", placeholder="Enter your email address") }}
+                    {% if form.email.errors %}
+                        <div class="mt-2 text-sm text-red-600 animate-fade-in">
+                            {% for error in form.email.errors %}
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="space-y-2">
+                    {{ form.password.label(class="block text-sm font-semibold text-gray-700 mb-2") }}
+                    {{ form.password(class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-gray-50 focus:bg-white", placeholder="Create a strong password") }}
+                    {% if form.password.errors %}
+                        <div class="mt-2 text-sm text-red-600 animate-fade-in">
+                            {% for error in form.password.errors %}
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="space-y-2">
+                    {{ form.password2.label(class="block text-sm font-semibold text-gray-700 mb-2") }}
+                    {{ form.password2(class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-gray-50 focus:bg-white", placeholder="Confirm your password") }}
+                    {% if form.password2.errors %}
+                        <div class="mt-2 text-sm text-red-600 animate-fade-in">
+                            {% for error in form.password2.errors %}
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    {{ form.submit(class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5") }}
+                </div>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Already have an account? 
+                    <a href="{{ url_for('login') }}" class="text-primary hover:text-secondary font-medium transition-colors">
+                        Sign in here
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Enhanced features preview with better visual design -->
+        <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 shadow-lg border border-gray-200">
+            <h3 class="text-sm font-bold text-gray-800 mb-4 flex items-center">
+                <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                What you'll get:
+            </h3>
+            <ul class="text-sm text-gray-600 space-y-3">
+                <li class="flex items-center p-2 bg-white rounded-lg shadow-sm">
+                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span>AI-powered crop price predictions</span>
+                </li>
+                <li class="flex items-center p-2 bg-white rounded-lg shadow-sm">
+                    <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span>Real-time soil monitoring</span>
+                </li>
+                <li class="flex items-center p-2 bg-white rounded-lg shadow-sm">
+                    <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span>Historical data visualization</span>
+                </li>
+                <li class="flex items-center p-2 bg-white rounded-lg shadow-sm">
+                    <div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-3 h-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span>Personalized recommendations</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

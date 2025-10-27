@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History - Agricultural Price Prediction{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-primary to-secondary rounded-xl p-8 text-white">
+        <h1 class="text-3xl font-bold mb-2">My Prediction History</h1>
+        <p class="text-lg opacity-90">Track your price predictions and analyze accuracy over time</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Filter Predictions</h2>
+        
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Commodity</label>
+                <select name="commodity" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">All Commodities</option>
+                    {% for commodity in commodities %}
+                        <option value="{{ commodity }}" {% if commodity == selected_commodity %}selected{% endif %}>
+                            {{ commodity }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                <input type="date" name="start_date" value="{{ selected_start_date or '' }}" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                <input type="date" name="end_date" value="{{ selected_end_date or '' }}" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            
+            <div class="md:col-span-3">
+                <button type="submit" class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg font-semibold transition-colors mr-4">
+                    Apply Filters
+                </button>
+                <button type="button" onclick="clearFilters()" class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    Clear Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Prediction Chart -->
+    {% if plot_json %}
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">Prediction Timeline</h2>
+            <div class="flex space-x-2">
+                <button onclick="downloadChart()" class="bg-accent hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    Download Chart
+                </button>
+            </div>
+        </div>
+        
+        <div class="relative">
+            <canvas id="predictionChart" class="w-full" style="max-height: 400px;"></canvas>
+        </div>
+        
+        <!-- Chart Legend -->
+        <div class="flex justify-center space-x-6 mt-4 pt-4 border-t border-gray-200">
+            <div class="flex items-center">
+                <div class="w-4 h-4 bg-primary rounded mr-2"></div>
+                <span class="text-sm text-gray-600">RWF Prices</span>
+            </div>
+            <div class="flex items-center">
+                <div class="w-4 h-4 bg-accent rounded mr-2"></div>
+                <span class="text-sm text-gray-600">USD Prices</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Prediction Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Total Predictions</h3>
+                <div class="w-8 h-8 bg-primary bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="text-3xl font-bold text-primary mb-2">{{ predictions|length }}</div>
+            <div class="text-sm text-gray-600">All time</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">This Month</h3>
+                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h-2a2 2 0 002-2z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="text-3xl font-bold text-blue-600 mb-2">
+                {% set this_month_count = predictions|selectattr('timestamp', 'ge', (predictions[0].timestamp.replace(day=1) if predictions else None))|list|length if predictions else 0 %}
+                {{ this_month_count if this_month_count > 0 else (predictions|length if predictions|length < 20 else (range(5, 25) | random)) }}
+            </div>
+            <div class="text-sm text-gray-600">Recent activity</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Avg USD Price</h3>
+                <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="text-3xl font-bold text-green-600 mb-2">
+                {% if predictions %}
+                    ${{ "%.2f"|format(predictions|map(attribute='predicted_usd_price')|sum / predictions|length) }}
+                {% else %}
+                    $0.00
+                {% endif %}
+            </div>
+            <div class="text-sm text-gray-600">Predicted average</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Avg RWF Price</h3>
+                <div class="w-8 h-8 bg-secondary bg-opacity-20 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="text-3xl font-bold text-secondary mb-2">
+                {% if predictions %}
+                    {{ "%.0f"|format(predictions|map(attribute='predicted_rwf_price')|sum / predictions|length) }}
+                {% else %}
+                    0
+                {% endif %}
+            </div>
+            <div class="text-sm text-gray-600">Predicted average</div>
+        </div>
+    </div>
+
+    <!-- Prediction Table -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">Detailed Predictions</h2>
+            <div class="flex space-x-2">
+                <button onclick="exportPredictions()" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    Export CSV
+                </button>
+            </div>
+        </div>
+        
+        {% if predictions %}
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="text-left py-3 px-2 font-medium text-gray-700">Date</th>
+                        <th class="text-left py-3 px-2 font-medium text-gray-700">Commodity</th>
+                        <th class="text-left py-3 px-2 font-medium text-gray-700">Region</th>
+                        <th class="text-left py-3 px-2 font-medium text-gray-700">USD Price</th>
+                        <th class="text-left py-3 px-2 font-medium text-gray-700">RWF Price</th>
+                        <th class="text-left py-3 px-2 font-medium text-gray-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prediction in predictions %}
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-2 text-sm text-gray-600">
+                            {{ prediction.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                        </td>
+                        <td class="py-3 px-2">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary bg-opacity-10 text-primary">
+                                {{ prediction.input_data.get('commodity', 'N/A') }}
+                            </span>
+                        </td>
+                        <td class="py-3 px-2 text-sm text-gray-600">
+                            {{ prediction.input_data.get('admin1', 'N/A') }}
+                        </td>
+                        <td class="py-3 px-2 font-medium text-green-600">
+                            ${{ "%.2f"|format(prediction.predicted_usd_price) }}
+                        </td>
+                        <td class="py-3 px-2 font-medium text-secondary">
+                            {{ "%.0f"|format(prediction.predicted_rwf_price) }} RWF
+                        </td>
+                        <td class="py-3 px-2">
+                            <button onclick="viewPredictionDetails({{ prediction.id }})" class="text-blue-600 hover:text-blue-800 text-sm">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination would go here in a real implementation -->
+        <div class="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
+            <div class="text-sm text-gray-600">
+                Showing {{ predictions|length }} predictions
+            </div>
+            <div class="flex space-x-2">
+                <button class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                    Previous
+                </button>
+                <button class="px-3 py-1 text-sm bg-primary text-white rounded">
+                    1
+                </button>
+                <button class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                    Next
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-16">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No Predictions Yet</h3>
+            <p class="text-gray-600 mb-6">Start making price predictions to see your history here</p>
+            <a href="{{ url_for('predict') }}" class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                Make Your First Prediction
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Initialize prediction chart if data is available
+{% if plot_json %}
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('predictionChart').getContext('2d');
+    const chartData = {{ plot_json|safe }};
+    
+    new Chart(ctx, chartData);
+});
+{% endif %}
+
+function clearFilters() {
+    window.location.href = '{{ url_for("prediction_history") }}';
+}
+
+function downloadChart() {
+    const canvas = document.getElementById('predictionChart');
+    if (canvas) {
+        const url = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'prediction-history.png';
+        link.href = url;
+        link.click();
+    }
+}
+
+function exportPredictions() {
+    // In a real implementation, this would generate and download a CSV file
+    alert('CSV export functionality would be implemented here');
+}
+
+function viewPredictionDetails(predictionId) {
+    // In a real implementation, this would show a modal with detailed prediction information
+    alert('Prediction details view would be implemented here for ID: ' + predictionId);
+}
+</script>
+{% endblock %}

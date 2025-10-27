@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Agricultural Price Prediction{% endblock %}
+
+{% block content %}
+<!-- Enhanced login page with better visual design and animations -->
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <div class="max-w-md w-full space-y-8 animate-fade-in">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <p class="text-gray-600">Sign in to your agricultural dashboard</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+            <form method="POST" class="space-y-6">
+                {{ form.hidden_tag() }}
+                
+                <div class="space-y-2">
+                    {{ form.username.label(class="block text-sm font-semibold text-gray-700 mb-2") }}
+                    {{ form.username(class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-gray-50 focus:bg-white", placeholder="Enter your username") }}
+                    {% if form.username.errors %}
+                        <div class="mt-2 text-sm text-red-600 animate-fade-in">
+                            {% for error in form.username.errors %}
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="space-y-2">
+                    {{ form.password.label(class="block text-sm font-semibold text-gray-700 mb-2") }}
+                    {{ form.password(class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-gray-50 focus:bg-white", placeholder="Enter your password") }}
+                    {% if form.password.errors %}
+                        <div class="mt-2 text-sm text-red-600 animate-fade-in">
+                            {% for error in form.password.errors %}
+                                <p class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        {{ form.remember_me(class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded transition-colors duration-200") }}
+                        {{ form.remember_me.label(class="ml-2 block text-sm text-gray-700 font-medium") }}
+                    </div>
+                    <a href="{{ url_for('forgot_password_request') }}" class="text-sm text-primary hover:text-secondary transition-colors duration-200 font-medium">
+                        Forgot password?
+                    </a>
+                </div>
+                
+                <div>
+                    {{ form.submit(class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5") }}
+                </div>
+            </form>
+            
+            <div class="mt-8 text-center">
+                <p class="text-gray-600">
+                    Don't have an account? 
+                    <a href="{{ url_for('signup') }}" class="text-primary hover:text-secondary font-semibold transition-colors duration-200">
+                        Sign up here
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Enhanced demo credentials section -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 shadow-lg">
+            <div class="flex items-center mb-3">
+                <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-sm font-bold text-blue-800">Demo Credentials</h3>
+            </div>
+            <div class="text-sm text-blue-700 space-y-2">
+                <div class="flex justify-between items-center p-2 bg-white bg-opacity-50 rounded-lg">
+                    <span class="font-medium">Regular User:</span>
+                    <span class="font-mono text-xs">testuser / testpass</span>
+                </div>
+                <div class="flex justify-between items-center p-2 bg-white bg-opacity-50 rounded-lg">
+                    <span class="font-medium">Admin:</span>
+                    <span class="font-mono text-xs">admin / (check logs)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

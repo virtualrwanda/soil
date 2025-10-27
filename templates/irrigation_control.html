@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="space-y-8">
+    <!-- Enhanced header with modern gradient and decorative elements -->
+    <div class="relative bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-700 rounded-2xl p-8 text-white overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white bg-opacity-5 rounded-full -translate-y-32 translate-x-32"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white bg-opacity-5 rounded-full translate-y-24 -translate-x-24"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-bold">Smart Irrigation Control</h1>
+            </div>
+            <p class="text-xl mb-6 text-blue-100">Advanced IoT irrigation management with real-time monitoring and automated control systems</p>
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                    <span class="text-sm">Real-time Control</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
+                    <span class="text-sm">Multi-sensor Monitoring</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-purple-400 rounded-full mr-2 animate-pulse"></div>
+                    <span class="text-sm">Automated Scheduling</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced add device button with better styling -->
+    <div class="flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">Irrigation Devices</h2>
+            <p class="text-gray-600">Manage and monitor your irrigation systems</p>
+        </div>
+        <button onclick="openAddDeviceModal()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Add New Device
+        </button>
+    </div>
+
+    <!-- Enhanced devices grid with better card styling -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        {% for device in devices %}
+        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100">
+            <!-- Enhanced device header with better gradient -->
+            <div class="bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-6">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-xl font-bold">{{ device.device_name }}</h3>
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-cyan-100 mb-3">{{ device.location }}</p>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                    <span class="text-sm">Online & Active</span>
+                </div>
+            </div>
+
+            <!-- Device Content -->
+            <div class="p-6">
+                <!-- Enhanced valves section with better styling -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-800">Water Valves</h4>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        {% for valve in device.valves %}
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+                            <span class="text-sm font-medium text-gray-700">{{ valve.valve_name }}</span>
+                            <button onclick="toggleValve({{ valve.id }})" 
+                                    class="valve-toggle w-12 h-6 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-inner {{ 'bg-green-500' if valve.is_open else 'bg-gray-300' }}">
+                                <div class="valve-slider w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 {{ 'translate-x-6' if valve.is_open else 'translate-x-0.5' }}"></div>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Enhanced moisture sensors section -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-800">Soil Moisture</h4>
+                    </div>
+                    <div class="space-y-3">
+                        {% for sensor in device.moisture_sensors %}
+                        <div class="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">{{ sensor.sensor_name }}</span>
+                                <span class="text-sm font-bold text-blue-600">{{ "%.1f"|format(sensor.moisture_level) }}%</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-500" style="width: {{ sensor.moisture_level }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Enhanced DHT sensors section -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-800">Climate Sensors</h4>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        {% for sensor in device.dht_sensors %}
+                        <div class="p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border border-orange-100">
+                            <div class="text-xs font-medium text-gray-500 mb-2">{{ sensor.sensor_name }}</div>
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-600">Temp</span>
+                                    <span class="text-sm font-bold text-orange-600">{{ "%.1f"|format(sensor.temperature) }}°C</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-600">Humidity</span>
+                                    <span class="text-sm font-bold text-blue-600">{{ "%.1f"|format(sensor.humidity) }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Enhanced device actions with better button styling -->
+                <div class="flex space-x-3">
+                    <button onclick="refreshDeviceData({{ device.id }})" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Refresh
+                    </button>
+                    <button onclick="openDeviceSettings({{ device.id }})" class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not devices %}
+    <!-- Enhanced empty state with better styling -->
+    <div class="text-center py-16">
+        <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+            </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-3">No Irrigation Devices</h3>
+        <p class="text-gray-600 mb-6 max-w-md mx-auto">Get started by adding your first smart irrigation device to monitor and control your water systems</p>
+        <button onclick="openAddDeviceModal()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            Add Your First Device
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Enhanced modal with better styling -->
+<div id="addDeviceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-lg mx-4 shadow-2xl">
+        <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-gray-900">Add New Device</h3>
+                <p class="text-gray-600">Configure your irrigation device</p>
+            </div>
+        </div>
+        <form action="{{ url_for('add_irrigation_device') }}" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Device Name</label>
+                <input type="text" name="device_name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Location</label>
+                <input type="text" name="location" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Latitude</label>
+                    <input type="number" step="any" name="latitude" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Longitude</label>
+                    <input type="number" step="any" name="longitude" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                </div>
+            </div>
+            <div class="flex space-x-4 pt-4">
+                <button type="button" onclick="closeAddDeviceModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-6 rounded-xl font-semibold transition-all duration-200">
+                    Cancel
+                </button>
+                <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    Add Device
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+<script>
+function openAddDeviceModal() {
+    document.getElementById('addDeviceModal').classList.remove('hidden');
+    document.getElementById('addDeviceModal').classList.add('flex');
+}
+
+function closeAddDeviceModal() {
+    document.getElementById('addDeviceModal').classList.add('hidden');
+    document.getElementById('addDeviceModal').classList.remove('flex');
+}
+
+function toggleValve(valveId) {
+    fetch(`/toggle_valve/${valveId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update UI immediately
+            const button = event.target.closest('button');
+            const slider = button.querySelector('.valve-slider');
+            
+            if (data.is_open) {
+                button.classList.remove('bg-gray-300');
+                button.classList.add('bg-green-500');
+                slider.classList.remove('translate-x-0.5');
+                slider.classList.add('translate-x-6');
+            } else {
+                button.classList.remove('bg-green-500');
+                button.classList.add('bg-gray-300');
+                slider.classList.remove('translate-x-6');
+                slider.classList.add('translate-x-0.5');
+            }
+            
+            // Show success notification
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('[v0] Error toggling valve:', error);
+        showNotification('Error controlling valve', 'error');
+    });
+}
+
+function refreshDeviceData(deviceId) {
+    // Simulate sensor data update
+    const mockData = {
+        moisture_sensors: [
+            { level: Math.random() * 100 },
+            { level: Math.random() * 100 },
+            { level: Math.random() * 100 },
+            { level: Math.random() * 100 }
+        ],
+        dht_sensors: [
+            { temperature: 20 + Math.random() * 15, humidity: 40 + Math.random() * 40 },
+            { temperature: 20 + Math.random() * 15, humidity: 40 + Math.random() * 40 },
+            { temperature: 20 + Math.random() * 15, humidity: 40 + Math.random() * 40 },
+            { temperature: 20 + Math.random() * 15, humidity: 40 + Math.random() * 40 }
+        ]
+    };
+    
+    fetch(`/update_sensor_data/${deviceId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mockData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('Sensor data refreshed successfully', 'success');
+            // Reload the page to show updated data
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('[v0] Error refreshing data:', error);
+        showNotification('Error refreshing sensor data', 'error');
+    });
+}
+
+function openDeviceSettings(deviceId) {
+    showNotification('Device settings feature coming soon!', 'info');
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 ${
+        type === 'success' ? 'bg-green-500 text-white' :
+        type === 'error' ? 'bg-red-500 text-white' :
+        'bg-blue-500 text-white'
+    }`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Auto-refresh sensor data every 30 seconds
+setInterval(() => {
+    const deviceCards = document.querySelectorAll('[onclick^="refreshDeviceData"]');
+    deviceCards.forEach(card => {
+        const deviceId = card.getAttribute('onclick').match(/\d+/)[0];
+        if (deviceId) {
+            refreshDeviceData(parseInt(deviceId));
+        }
+    });
+}, 30000);
+</script>
+{% endblock %}
